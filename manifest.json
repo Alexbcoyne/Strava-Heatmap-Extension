@@ -1,0 +1,15 @@
+{
+    "manifest_version": 3,
+    "name": "Strava Heatmap",
+    "version": "1.0.0",
+    "action": {
+      "default_popup": "popup.html"
+    },
+    "permissions": [
+      "storage"
+    ],
+    "host_permissions": [
+      "https://www.strava.com/*"
+    ]
+  }
+  
