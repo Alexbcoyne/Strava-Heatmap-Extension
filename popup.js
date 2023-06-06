@@ -3,12 +3,13 @@ document.addEventListener('DOMContentLoaded', function () {
     // call strava api to pull start_date and moving_time (count)
 
     const heatmapData = [
-        // placeholder data
-        { date: 1673038800, count: 10 },
-        { date: 1674819600, count: 5 },
-        { date: 1677906000, count: 15 },
-        { date: 1678794000, count: 10 },
-        { date: 1680618000, count: 5 },
+        { date: new Date(1672531200 * 1000), count: 100 },
+        { date: new Date(1673049600 * 1000), count: 75 },
+        { date: new Date(1673673600 * 1000), count: 135 },
+        { date: new Date(1674192000 * 1000), count: 40 },
+        { date: new Date(1674883200 * 1000), count: 210 },
+        { date: new Date(1675411200 * 1000), count: 165 },
+        { date: new Date(1676035200 * 1000), count: 90 },
     ];
 
     // create heatmap
@@ -29,9 +30,9 @@ function createHeatmap(heatmapData) {
         cellPadding: 1,
         startDate: new Date().getFullYear() + '-01-01',
         endDate: new Date().getFullYear() + '-12-31',
-        colorRange: ['#d6e685', '#8cc665', '#44a340', '#1e6823'],
+        colorRange: ['#DBDBDB', '#FFD3C0', '#FFA37C', '#FF7E46', '#FC4C02'],
         tooltipUnit: 'minutes'
-    }
+    };
 
     const maxCount = Math.max(...heatmapData.map(d => d.count));
     
@@ -54,17 +55,18 @@ function createHeatmap(heatmapData) {
         })
         .attr("fill", function (d) {
             const date = formatDate(d);
-            const count = heatmapData[date] || 0;
+            const dataPoint = heatmapData.find(data => formatDate(data.date) === date);
+            const count = dataPoint ? dataPoint.count : 0;
             const colorIndex = Math.floor((count / maxCount) * (options.colorRange.length - 1));
             return options.colorRange[colorIndex];
         })
         .append("title")
         .text(function (d) {
             const date = formatDate(d);
-            const count = heatmapData[date] || 0;
+            const dataPoint = heatmapData.find(data => formatDate(data.date) === date);
+            const count = dataPoint ? dataPoint.count : 0;
             return `${date}: ${count} ${options.tooltipUnit}`;
         });
-
 }
 
 function formatDate(date) {
