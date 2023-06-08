@@ -1,20 +1,30 @@
 document.addEventListener('DOMContentLoaded', function () {
-    // get data
-    // call strava api to pull start_date and moving_time (count)
-
-    const heatmapData = [
-        { date: new Date(1672531200 * 1000), count: 100 },
-        { date: new Date(1673049600 * 1000), count: 75 },
-        { date: new Date(1673673600 * 1000), count: 135 },
-        { date: new Date(1674192000 * 1000), count: 40 },
-        { date: new Date(1674883200 * 1000), count: 210 },
-        { date: new Date(1675411200 * 1000), count: 165 },
-        { date: new Date(1676035200 * 1000), count: 90 },
-    ];
+    // fetch start_date(date) and movingTime(count)
+    
+    // const heatmapData = [ { date: new Date(1672531200 * 1000), count: 100 }, ]; // DATA EXAMPLE
+    const heatmapData = [];
+    getData(heatmapData);
+    // authorize -> get start_date/moving_time = heatmapData -> createHeatmap()
 
     // create heatmap
     createHeatmap(heatmapData);
 });
+
+function getData(data) {
+    fetch('https://www.strava.com/api/v3/athlete/activities?per_page=200', {
+        headers: {
+            Authorization: `Bearer ${config.accessToken}`
+        }
+    })
+        .then(response => response.json())
+        .then(data => {
+            // Invoke the callback function with the activities data
+            callback(data);
+        })
+        .catch(error => {
+            console.error('Error fetching activities:', error);
+        });
+}
 
 function createHeatmap(heatmapData) {
     // heatmap dimensions
