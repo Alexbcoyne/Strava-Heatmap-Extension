@@ -3,28 +3,51 @@ document.addEventListener('DOMContentLoaded', function () {
     
     // const heatmapData = [ { date: new Date(1672531200 * 1000), count: 100 }, ]; // DATA EXAMPLE
     const heatmapData = [];
-    getData(heatmapData);
+    
+    reAuth();
+
     // authorize -> get start_date/moving_time = heatmapData -> createHeatmap()
 
     // create heatmap
     createHeatmap(heatmapData);
 });
 
-function getData(data) {
-    fetch('https://www.strava.com/api/v3/athlete/activities?per_page=200', {
+function reAuth() {
+    // create authorization process and redirect user to auth page
+
+    const refreshToken = config.refreshToken;
+    const clientId = config.clientId;
+    const clientSecret = config.clientSecret;
+
+    fetch('https://www.strava.com/api/v3/oauth/token', {
+        method: 'POST',
         headers: {
-            Authorization: `Bearer ${config.accessToken}`
-        }
-    })
-        .then(response => response.json())
-        .then(data => {
-            // Invoke the callback function with the activities data
-            callback(data);
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            grant_type: 'refresh_token',
+            clientId: clientId,
+            clientSecret: clientSecret,
+            refreshToken: refreshToken
         })
-        .catch(error => {
-            console.error('Error fetching activities:', error);
-        });
+    })
+        .then(res => res.json())
+        .then(data => {
+            const accessToken = data.access_token;
+            const expiresIn = data.expires_in;
+
+            const expirationTime = Date.now() + (expiresIn * 1000);
+
+            
+        })
+
+    getData();
 }
+
+function getData() {
+    // fetch request to get strava athlete activity data
+}
+
 
 function createHeatmap(heatmapData) {
     // heatmap dimensions
