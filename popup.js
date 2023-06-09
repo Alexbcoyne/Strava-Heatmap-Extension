@@ -3,9 +3,30 @@ document.addEventListener('DOMContentLoaded', function () {
     
     // const heatmapData = [ { date: new Date(1672531200 * 1000), count: 100 }, ]; // DATA EXAMPLE
     const heatmapData = [];
-    
-    reAuth();
 
+    // if button hidden - get data
+    // else auth() + hidden
+
+    var btn = document.getElementById('auth-btn');
+    btn.addEventListener('click', hideshow, false);
+
+    // TODO Button to auth by default is hidden
+    // if auth invalid show button
+
+    function hideshow() {
+        if(btn.style.display !== 'none') {
+            
+            // TODO get authorization
+            // if auth is valid/complete hide button, run getData()
+
+            // reAuth()
+            
+            this.style.display = 'none';
+        }
+        
+    }
+    
+    // reAuth();
     // authorize -> get start_date/moving_time = heatmapData -> createHeatmap()
 
     // create heatmap
