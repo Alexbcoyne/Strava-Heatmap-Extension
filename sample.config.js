@@ -1,7 +1,7 @@
 const config = {
     accessToken: '<ACCESS_TOKEN>',
     clientId: 'CLIENT_ID',
-    clientSecret: 'CLIENT_SECTRET',
+    clientSecret: 'CLIENT_SECRET',
     refreshToken: 'REFRESH_TOKEN',
 };
 
