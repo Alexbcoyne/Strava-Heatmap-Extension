@@ -7,22 +7,27 @@ document.addEventListener('DOMContentLoaded', function () {
 
 function getData() {
     // fetch request to get strava athlete activity data
-    fetch('https://www.strava.com/api/v3/athlete/activities', {
-        headers: {
-            'Authorization': `Bearer ${config.accessToken}`,
-        },
+    const url = `https://www.strava.com/api/v3/athlete/activities?access_token=${config.accessToken}`;
+    fetch(url)
+    .then(response => {
+        if (response.ok) {
+            console.log("res ok")
+            return response.json();
+        } else {
+            throw new Error (`Request failed with status code ${response.status}`);
+        }
     })
     .then(data => {
-        const activities = data.map(activity => ({
+        const activityData = data.map(activity => ({
             startDate: activity.start_date,
             movingTime: activity.moving_time
         }));
-        console.log(activities);
+
+        console.log(activityData);
     })
     .catch(error => {
         console.error('Error:', error);
     });
-
 }
 
 
