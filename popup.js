@@ -2,14 +2,12 @@ document.addEventListener('DOMContentLoaded', function () {
     getData();
 });
 
-
 function getData() {
     // fetch request to get strava athlete activity data
     const url = `https://www.strava.com/api/v3/athlete/activities?access_token=${config.accessToken}`;
     fetch(url)
     .then(response => {
         if (response.ok) {
-            console.log("res ok")
             return response.json();
         } else {
             throw new Error (`Request failed with status code ${response.status}`);
@@ -17,10 +15,9 @@ function getData() {
     })
     .then(data => {
         const activityData = data.map(activity => ({
-            date: new Date(Date.parse(activity.start_date)),
+            date: new Date(activity.start_date).getTime(),
             count: activity.moving_time / 60
         }));
-
         console.log(activityData);
         createHeatmap(activityData);
     })
@@ -30,6 +27,8 @@ function getData() {
 }
 
 function createHeatmap(heatmapData) {
+    console.log(heatmapData);
+
     // heatmap dimensions
     const width = 570;
     const height = 120;
@@ -82,7 +81,8 @@ function createHeatmap(heatmapData) {
         });
 }
 
-function formatDate(date) {
+function formatDate(epoch) {
+    const date = new Date(epoch);
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
