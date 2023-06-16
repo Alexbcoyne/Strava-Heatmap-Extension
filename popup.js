@@ -49,22 +49,26 @@ function createHeatmap(heatmapData) {
     const minCount = Math.min(...heatmapData.map(d => d.count));
     const maxCount = Math.max(...heatmapData.map(d => d.count));
 
+    // Calculate the number of weeks between the start and end dates
+    const numWeeks = d3.timeWeeks(options.startDate, options.endDate).length;
+
+    // Calculate the cell size based on the available width and number of weeks
+    const cellSize = Math.floor(width / (numWeeks + 1)); // +1 to accommodate the label column
+
     // build calendar heatmap
     svg.selectAll("rect")
-        .data(d3.timeDays(new Date(options.startDate), new Date(options.endDate)))
+        .data(d3.timeDays(options.startDate, options.endDate))
         .enter()
         .append("rect")
-        .attr("width", options.cellSize - options.cellPadding)
-        .attr("height", options.cellSize - options.cellPadding)
-        .attr("x", function (d) {
-            const dayIndex = d.getDay();
-            const weekIndex = d3.timeWeek.count(d3.timeYear(d), d);
-            return weekIndex * (options.cellSize + options.cellPadding) + options.cellPadding;
+        .attr("width", cellSize - options.cellPadding)
+        .attr("height", cellSize - options.cellPadding)
+        .attr("x", function(d) {
+            const dayIndex = d3.timeDay.count(options.startDate, d);
+            const weekIndex = Math.floor(dayIndex / 7); // Group cells by weeks
+            return (weekIndex + 1) * cellSize; // +1 to accommodate the label column
         })
-        .attr("y", function (d) {
-            const dayIndex = d.getDay();
-            const weekIndex = d3.timeWeek.count(d3.timeYear(d), d);
-            return dayIndex * (options.cellSize + options.cellPadding) + options.cellPadding;
+        .attr("y", function(d) {
+            return d.getDay() * cellSize;
         })
         .attr("fill", function (d) {
             const date = formatDate(d);
