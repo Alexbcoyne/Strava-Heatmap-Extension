@@ -87,7 +87,8 @@ function createHeatmap(heatmapData) {
             const date = formatDate(d);
             const dataPoint = heatmapData.find(data => formatDate(data.date) === date);
             const count = dataPoint ? dataPoint.count : 0;
-            return `${date}: ${count} ${options.tooltipUnit}`;
+            const day = d.toLocaleDateString("en-US", { weekday: 'short' }); // Get the short day name
+            return `${day}, ${date}: ${count} ${options.tooltipUnit}`;
         });
 
 }
