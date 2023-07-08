@@ -78,7 +78,8 @@ function createHeatmap(heatmapData) {
             if (count === 0) {
                 return "#DBDBDB";
             } else {
-                const colorIndex = Math.floor(((count - minCount) / (maxCount - minCount)) * (options.colorRange.length - 1));
+                const roundedCount = count.toFixed(2);
+                const colorIndex = Math.floor(((roundedCount - minCount) / (maxCount - minCount)) * (options.colorRange.length - 1));
                 return options.colorRange[colorIndex];
             }
         })
@@ -87,8 +88,9 @@ function createHeatmap(heatmapData) {
             const date = formatDate(d);
             const dataPoint = heatmapData.find(data => formatDate(data.date) === date);
             const count = dataPoint ? dataPoint.count : 0;
+            const roundedCount = count.toFixed(2);
             const day = d.toLocaleDateString("en-US", { weekday: 'short' }); // Get the short day name
-            return `${day}, ${date}: ${count} ${options.tooltipUnit}`;
+            return `${day}, ${date}: ${roundedCount} ${options.tooltipUnit}`;
         });
 
 }
